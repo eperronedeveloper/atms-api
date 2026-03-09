@@ -1,0 +1,409 @@
+openapi: 3.0.0
+info:
+  description: "API para la gestión de cajeros automáticos (ATMs) en Argentina. Permite\
+    \ buscar, listar y obtener detalles de cajeros por banco, ubicación, localidad,\
+    \ etc."
+  title: ATMs Microservice API
+  version: 1.0.0
+servers:
+- description: Servidor de producción (cambia según tu deploy)
+  url: https://atms-api.vercel.app/api
+tags:
+- description: Gestión de cajeros automáticos
+  name: ATMs
+paths:
+  /atms/search:
+    get:
+      description: "Permite buscar cajeros por banco, localidad, código postal, disponibilidad\
+        \ 24h, etc. Compatible con paginación y scroll infinito."
+      operationId: searchATMs
+      parameters:
+      - description: Número de elementos a saltar antes de empezar a devolver resultados.
+        example: 0
+        explode: true
+        in: query
+        name: offset
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      - description: Cantidad máxima de elementos a devolver (máximo 100).
+        example: 10
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 10
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      - description: "Nombre o código del banco (ej. \"Banco Nación\", \"BBVA\", \"\
+          Santander\")"
+        explode: true
+        in: query
+        name: bank
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: ID de la localidad (relacionado con la API de localidades)
+        explode: true
+        in: query
+        name: localityId
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: Código postal aproximado
+        explode: true
+        in: query
+        name: postalCode
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Filtrar solo cajeros con atención 24 horas
+        explode: true
+        in: query
+        name: has24h
+        required: false
+        schema:
+          type: boolean
+        style: form
+      - description: "Búsqueda libre (dirección, banco, localidad o barrio)"
+        explode: true
+        in: query
+        name: q
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Estado del registro del cajero
+        explode: true
+        in: query
+        name: status
+        required: false
+        schema:
+          enum:
+          - active
+          - inactive
+          - deleted
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/searchATMs_200_response'
+          description: Respuesta exitosa
+        "400":
+          description: Parámetros de búsqueda inválidos
+        "401":
+          description: No autorizado
+        "404":
+          description: No encontrado
+        "500":
+          description: Error interno del servidor
+      security: []
+      summary: Búsqueda avanzada de cajeros
+      tags:
+      - ATMs
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: ATMs
+  /atms/list:
+    get:
+      description: Obtiene una lista paginada de todos los cajeros (sin filtros avanzados).
+      operationId: listATMs
+      parameters:
+      - description: Número de elementos a saltar antes de empezar a devolver resultados.
+        example: 0
+        explode: true
+        in: query
+        name: offset
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      - description: Cantidad máxima de elementos a devolver (máximo 100).
+        example: 10
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 10
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      - description: Estado de los registros a devolver.
+        example: active
+        explode: true
+        in: query
+        name: status
+        required: false
+        schema:
+          enum:
+          - active
+          - inactive
+          - deleted
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/searchATMs_200_response'
+          description: Lista de cajeros obtenida exitosamente
+        "401":
+          description: No autorizado
+        "404":
+          description: No encontrado
+        "500":
+          description: Error interno del servidor
+      security: []
+      summary: Listar cajeros paginados
+      tags:
+      - ATMs
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: ATMs
+  /atms/{atmId}:
+    get:
+      description: Retorna los datos completos de un cajero automático por su ID.
+      operationId: getATMById
+      parameters:
+      - description: ID del cajero automático
+        explode: false
+        in: path
+        name: atmId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ATM'
+          description: Detalle del cajero obtenido exitosamente
+        "401":
+          description: No autorizado
+        "404":
+          description: Cajero no encontrado
+        "500":
+          description: Error interno del servidor
+      security: []
+      summary: Obtener detalle de un cajero
+      tags:
+      - ATMs
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: ATMs
+components:
+  parameters:
+    OffsetParam:
+      description: Número de elementos a saltar antes de empezar a devolver resultados.
+      example: 0
+      explode: true
+      in: query
+      name: offset
+      required: false
+      schema:
+        default: 0
+        minimum: 0
+        type: integer
+      style: form
+    LimitParam:
+      description: Cantidad máxima de elementos a devolver (máximo 100).
+      example: 10
+      explode: true
+      in: query
+      name: limit
+      required: false
+      schema:
+        default: 10
+        maximum: 100
+        minimum: 1
+        type: integer
+      style: form
+    Status:
+      description: Estado de los registros a devolver.
+      example: active
+      explode: true
+      in: query
+      name: status
+      required: false
+      schema:
+        enum:
+        - active
+        - inactive
+        - deleted
+        type: string
+      style: form
+  schemas:
+    Pagination:
+      example:
+        totalItems: 150
+        offset: 0
+        limit: 10
+      properties:
+        totalItems:
+          description: Cantidad total de registros que cumplen el filtro
+          example: 150
+          type: integer
+        offset:
+          example: 0
+          type: integer
+        limit:
+          example: 10
+          type: integer
+      required:
+      - limit
+      - offset
+      - totalItems
+      type: object
+    ATM:
+      example:
+        createdAt: 2025-01-15T14:30:00Z
+        bank: Banco Nación
+        address: "Av. Mitre 123, Florida"
+        latitude: -34.5333
+        postalCode: B1605
+        id: 12345
+        localityId: 5678
+        hasDeposit: false
+        longitude: -58.4833
+        has24h: true
+        status: active
+        updatedAt: 2025-03-08T22:45:00Z
+      properties:
+        id:
+          description: ID único del cajero
+          example: 12345
+          readOnly: true
+          type: integer
+        bank:
+          description: "Nombre del banco o entidad (ej. \"Banco Nación\", \"BBVA\"\
+            , \"Santander Río\")"
+          example: Banco Nación
+          type: string
+        address:
+          description: Dirección completa del cajero
+          example: "Av. Mitre 123, Florida"
+          type: string
+        latitude:
+          description: Latitud (para mapas)
+          example: -34.5333
+          format: float
+          type: number
+        longitude:
+          description: Longitud (para mapas)
+          example: -58.4833
+          format: float
+          type: number
+        localityId:
+          description: ID de la localidad (relacionado con tu API de localidades)
+          example: 5678
+          type: integer
+        postalCode:
+          description: Código postal aproximado
+          example: B1605
+          type: string
+        has24h:
+          description: ¿Funciona las 24 horas?
+          example: true
+          type: boolean
+        hasDeposit:
+          description: ¿Permite depósitos?
+          example: false
+          type: boolean
+        status:
+          description: Estado del registro
+          enum:
+          - active
+          - inactive
+          - deleted
+          example: active
+          type: string
+        createdAt:
+          example: 2025-01-15T14:30:00Z
+          format: date-time
+          readOnly: true
+          type: string
+        updatedAt:
+          example: 2025-03-08T22:45:00Z
+          format: date-time
+          readOnly: true
+          type: string
+      required:
+      - address
+      - bank
+      - latitude
+      - longitude
+      type: object
+    searchATMs_200_response:
+      example:
+        pagination:
+          totalItems: 150
+          offset: 0
+          limit: 10
+        atms:
+        - createdAt: 2025-01-15T14:30:00Z
+          bank: Banco Nación
+          address: "Av. Mitre 123, Florida"
+          latitude: -34.5333
+          postalCode: B1605
+          id: 12345
+          localityId: 5678
+          hasDeposit: false
+          longitude: -58.4833
+          has24h: true
+          status: active
+          updatedAt: 2025-03-08T22:45:00Z
+        - createdAt: 2025-01-15T14:30:00Z
+          bank: Banco Nación
+          address: "Av. Mitre 123, Florida"
+          latitude: -34.5333
+          postalCode: B1605
+          id: 12345
+          localityId: 5678
+          hasDeposit: false
+          longitude: -58.4833
+          has24h: true
+          status: active
+          updatedAt: 2025-03-08T22:45:00Z
+      properties:
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        atms:
+          items:
+            $ref: '#/components/schemas/ATM'
+          type: array
+      type: object
+  securitySchemes:
+    clientId:
+      in: header
+      name: x-client-id
+      type: apiKey
+    clientSecret:
+      in: header
+      name: x-client-secret
+      type: apiKey
+    BearerAuth:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http

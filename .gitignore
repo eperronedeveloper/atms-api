@@ -1,0 +1,18 @@
+# Certificados y secrets
+*.pem
+*.key
+*.crt
+*.cer
+
+# Archivos sensibles de configuración
+application-secrets.properties
+application.yml
+*.yml.secret
+
+# Carpetas de build y temporales
+target/
+.idea/
+*.iml
+.mvn/
+mvnw
+mvnw.cmd

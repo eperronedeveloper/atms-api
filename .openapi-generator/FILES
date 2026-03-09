@@ -1,0 +1,16 @@
+.openapi-generator-ignore
+README.md
+pom.xml
+src/main/java/dev/eperrone/atms/OpenApiGeneratorApplication.java
+src/main/java/dev/eperrone/atms/RFC3339DateFormat.java
+src/main/java/dev/eperrone/atms/api/ApiUtil.java
+src/main/java/dev/eperrone/atms/api/AtmsApi.java
+src/main/java/dev/eperrone/atms/api/AtmsApiController.java
+src/main/java/dev/eperrone/atms/config/HomeController.java
+src/main/java/dev/eperrone/atms/config/SpringDocConfiguration.java
+src/main/java/dev/eperrone/atms/model/ATM.java
+src/main/java/dev/eperrone/atms/model/Pagination.java
+src/main/java/dev/eperrone/atms/model/SearchATMs200Response.java
+src/main/resources/application.properties
+src/main/resources/openapi.yaml
+src/test/java/dev/eperrone/atms/OpenApiGeneratorApplicationTests.java
