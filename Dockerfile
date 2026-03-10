@@ -14,4 +14,7 @@ RUN mvn clean package -DskipTests
 
 EXPOSE 8080
 
+ENV PORT=8080
+ENV RAILWAY_RUN_UID=0
+
 CMD ["java", "-jar", "/app/target/atms-service-1.0.0.jar"]
