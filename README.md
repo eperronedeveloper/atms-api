@@ -2,12 +2,12 @@
 
 Microservicio RESTful en **Java 21 + Spring Boot 3** para gestionar cajeros automáticos (ATMs) en Argentina.
 
-Permite:
-- Listar cajeros paginados (`/api/atms/list`)
-- Obtener detalle de un cajero por ID (`/api/atms/{id}`)
-- (Próximamente) Búsqueda avanzada con filtros (`/api/atms/search`)
+Endpoints disponibles:
+- `GET /api/atms/list` → Lista paginada de todos los cajeros
+- `GET /api/atms/{atmId}` → Detalle de un cajero por ID
+- `GET /api/atms/search` → Búsqueda avanzada con filtros (banco, localidad, código postal, 24h, búsqueda libre, estado)
 
-Conexión real a base MySQL en Aiven, con paginación, manejo de errores y documentación OpenAPI.
+Conexión real a base MySQL en Aiven, paginación, respuestas envueltas (status, message, description, data), manejo global de errores y documentación OpenAPI/Swagger.
 
 ## Tecnologías
 
