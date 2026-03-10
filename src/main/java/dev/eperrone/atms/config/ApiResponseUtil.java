@@ -29,7 +29,6 @@ public class ApiResponseUtil {
         putCode(429, "Demasiadas Solicitudes", "El cliente ha enviado demasiadas solicitudes en un periodo de tiempo corto.");
         // 5xx Errores del servidor
         putCode(500, "Error Interno del Servidor", "El servidor encontró una condición inesperada que le impide completar la solicitud.");
-        // Agregá los que faltan...
     }
 
     private static void putCode(int code, String message, String description) {
