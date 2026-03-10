@@ -9,14 +9,12 @@ import java.util.Map;
 
 public class ApiResponseUtil {
 
-    // Mapa estático con todos los códigos HTTP + mensaje + descripción (igual que tu Service.errors)
     private static final Map<Integer, Map<String, String>> HTTP_CODES = new HashMap<>();
 
     static {
         // 1xx Informacionales
         putCode(100, "Continuar", "El cliente debe continuar con la solicitud.");
         putCode(101, "Cambiando Protocolos", "El servidor acepta cambiar al protocolo especificado.");
-        // ... podés copiar todos los que tenés en Express
         // 2xx Éxito
         putCode(200, "OK", "La solicitud ha sido exitosa.");
         putCode(201, "Creado", "La solicitud ha sido completada y se ha creado un nuevo recurso.");
@@ -68,7 +66,6 @@ public class ApiResponseUtil {
         return new ResponseEntity<>(errorBody, HttpStatus.valueOf(code));
     }
 
-    // Helpers rápidos para los casos más comunes
     public static <T> ResponseEntity<Map<String, Object>> ok(T payload) {
         return success(payload, 200);
     }

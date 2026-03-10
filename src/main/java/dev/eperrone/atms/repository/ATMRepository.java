@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ATMRepository extends JpaRepository<ATM, Long> {
-    // Puedes agregar métodos personalizados aquí si querés (ej: findByBank)
 }
